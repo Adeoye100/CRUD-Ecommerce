@@ -1,4 +1,4 @@
-// Authentication Debug Utilities
+pnpm // Authentication Debug Utilities
 // Comprehensive debugging tools for Firebase and JWT authentication flow
 
 // Lazy import store to avoid circular dependency
