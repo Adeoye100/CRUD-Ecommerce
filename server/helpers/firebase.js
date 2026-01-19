@@ -15,7 +15,7 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
-const bucket = admin.storage().bucket();
+const bucket = admin.storage().bucket(process.env.FIREBASE_STORAGE_BUCKET);
 
 const imageUploadUtil = (file, folderName) => {
   return new Promise((resolve, reject) => {
@@ -33,10 +33,12 @@ const imageUploadUtil = (file, folderName) => {
     });
 
     blobStream.on("finish", () => {
-      // Construct the public URL (works because storage.rules allows public reads)
-      const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${
-        bucket.name
-      }/o/${encodeURIComponent(fileName)}?alt=media`;
+      // Construct the public URL
+      // Note: bucket.name returns just the bucket name, we need to append .firebasestorage.app
+      const bucketName = process.env.FIREBASE_STORAGE_BUCKET || bucket.name;
+      const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${encodeURIComponent(
+        bucketName
+      )}/o/${encodeURIComponent(fileName)}?alt=media`;
       resolve({ url: publicUrl });
     });
 
